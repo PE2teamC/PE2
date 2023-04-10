@@ -16,8 +16,6 @@ plt.subplot(1, 2, 1)
 
 
 
-
-
 # Voltage 태그와 Current 태그에서 데이터를 추출합니다.
 voltage_list=[]
 current_list=[]
