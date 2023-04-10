@@ -13,6 +13,11 @@ font_title = {'weight': 'bold', 'size': 18}
 # 1행 2열의 그래프 중 첫 번째 그래프를 생성합니다.
 plt.subplot(1, 2, 1)
 
+
+
+
+
+
 # Voltage 태그와 Current 태그에서 데이터를 추출합니다.
 voltage_list=[]
 current_list=[]
