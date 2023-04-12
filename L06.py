@@ -3,7 +3,7 @@ import numpy as np  # 배열 연산에 필요한 모듈
 import matplotlib.pyplot as plt  # 그래프를 그리기 위한 모듈
 from sklearn.metrics import r2_score
 
-#####추가#####ddd
+
 # XML 파일 parsing
 tree = ET.parse("HY202103_D07_(0,0)_LION1_DCM_LMZC.xml")
 root = tree.getroot()
