@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d57b0905-dbc2-4e19-9191-f040ee80f91f" name="Changes" comment="" />
+    <list default="true" id="d57b0905-dbc2-4e19-9191-f040ee80f91f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,13 +39,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dbsmi/PycharmProjects/pythonProject2&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/dbsmi/PycharmProjects/PE2_yoon"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Python.L06">
     <configuration name="L06" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject2" />
@@ -180,7 +182,21 @@
       <option name="project" value="LOCAL" />
       <updated>1681300186614</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="wavelength fitting, R_squared&#10;&#10;+best Degree real3">
+      <created>1681300913857</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1681300913857</updated>
+    </task>
+    <task id="LOCAL-00010" summary="little">
+      <created>1681345939850</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1681345939850</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -190,6 +206,8 @@
     <MESSAGE value="wavelength fitting, R_squared&#10;&#10;+best Degree" />
     <MESSAGE value="wavelength fitting, R_squared&#10;&#10;+best Degree real" />
     <MESSAGE value="wavelength fitting, R_squared&#10;&#10;+best Degree real2" />
-    <option name="LAST_COMMIT_MESSAGE" value="wavelength fitting, R_squared&#10;&#10;+best Degree real2" />
+    <MESSAGE value="wavelength fitting, R_squared&#10;&#10;+best Degree real3" />
+    <MESSAGE value="little" />
+    <option name="LAST_COMMIT_MESSAGE" value="little" />
   </component>
 </project>
