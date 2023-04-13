@@ -2,10 +2,10 @@ import xml.etree.ElementTree as ET  # XML 파일 parsing에 필요한 모듈
 import numpy as np  # 배열 연산에 필요한 모듈
 import matplotlib.pyplot as plt  # 그래프를 그리기 위한 모듈
 from sklearn.metrics import r2_score
-#살짝 수정함 다시함. 변경함
+#살짝 수정함 다시함.
 #그래프를 모았을 때 폰트설정
-total_font_axis = {'weight': 'bold', 'size': 11}
-total_font_title = {'weight': 'bold', 'size': 14}
+total_font_axis = {'weight': 'bold', 'size': 10}
+total_font_title = {'weight': 'bold', 'size': 12}
 
 # 축 레이블과 제목에 적용될 폰트 설정을 변수로 저장
 font_axis = {'weight': 'bold', 'size': 12}
@@ -34,7 +34,7 @@ af = np.polyval(afc,voltage)
 plt.plot(voltage, af, 'r--', lw=2, label='best-fit')
 plt.scatter(voltage, current, s=50, label='data')
 #R_squared
-R_squared = r2_score(voltage,af)
+R_squared = r2_score(current,af)
 
 position_x, position_y=0.05,0.6  # 초기 위치
 for x, y in zip([-2, -1, 1], [current[voltage == -2][0], current[voltage == -1][0], current[voltage == 1.0][0]]):
@@ -62,7 +62,7 @@ plt.grid(True,axis='both', color='gray', alpha=0.5, linestyle='--') # 가독성�
 # ----------------------Transmission_graph----------------------------------
 
 plt.subplot(2, 3, 1)
-plot_color = ['lightcoral', 'coral', 'gold', 'lightgreen', 'lightskyblue', 'plum']  # 색 list 생성
+plot_color = ['lightcoral', 'coral', 'gold', 'lightgreen', 'lightskyblue', 'plum', 'navy', 'black', 'red']  # 색 list 생성
 color_number = 0    # 초기 색 설정
 
 # WavelengthSweep 태그와 Modulator 태그에서 데이터를 추출
@@ -103,17 +103,20 @@ for i in range(1, 9):
     af = np.polyval(afc, wl)
     R_squared = r2_score(tm, af)
     best_fit_list.append((i, af, R_squared))
+    plt.plot(wl, af, plot_color[i], lw=2, label=f'{i}th')
+    plt.scatter(wl, tm, s=10)
 
 best_fit_list = sorted(best_fit_list, key=lambda x: abs(x[2] - 1))[:3]
 
-position_x, position_y = 0.4, 0.4
+position_x, position_y = 0.4, 0.5
 for i, af, R_squared in best_fit_list:
-    plt.plot(wl, af, 'r--', lw=2, label=f'degree={i}')
-    plt.scatter(wl, tm, s=10)
-    plt.text(position_x, position_y, f'Degree: {i}\nR_squared: {R_squared:.10f}',
+    text_color = 'red' if R_squared == max([item[2] for item in best_fit_list]) else 'black'
+    plt.text(position_x, position_y, f'Degree: {i}\nR_squared: {R_squared:.15f}',
+             color=text_color,  # 텍스트 색상을 위에서 설정한 값으로 설정
              transform=plt.gca().transAxes,
              fontsize=8, fontweight='bold')
     position_y -= 0.1
+
 
 plt.title('Transmission spectra - processed and fitting', fontdict=total_font_title)
 plt.xlabel('Wavelength [nm]', fontdict=total_font_axis)
