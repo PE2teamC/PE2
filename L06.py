@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET  # XML 파일 parsing에 필요한 모듈
 import numpy as np  # 배열 연산에 필요한 모듈
 import matplotlib.pyplot as plt  # 그래프를 그리기 위한 모듈
 from sklearn.metrics import r2_score
-#살짝 수정함 다시함.
+#살짝 수정함 다시함. 변경함
 #그래프를 모았을 때 폰트설정
 total_font_axis = {'weight': 'bold', 'size': 11}
 total_font_title = {'weight': 'bold', 'size': 14}
