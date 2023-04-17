@@ -2,7 +2,8 @@ import xml.etree.ElementTree as ET  # XML 파일 parsing에 필요한 모듈
 import numpy as np  # 배열 연산에 필요한 모듈
 import matplotlib.pyplot as plt  # 그래프를 그리기 위한 모듈
 from sklearn.metrics import r2_score
-#살짝 수정함 다시함.
+from lmfit import Model
+
 #그래프를 모았을 때 폰트설정
 total_font_axis = {'weight': 'bold', 'size': 10}
 total_font_title = {'weight': 'bold', 'size': 12}
@@ -27,14 +28,35 @@ for i in root.iter():   # XML 파일의 모든 요소에 대해서 반복문 수
 # 추출한 데이터를 NumPy 배열로 변환
 voltage = np.array(voltage_list)
 current = np.abs(current_list)  # data 절댓값
-# 12차 다항식을 이용해 근사함수(best-fit) 함수 생성
-afc = np.polyfit(voltage, current, 12)
-af = np.polyval(afc,voltage)
+# 근사 함수 생성 -------------------------------------
 
-plt.plot(voltage, af, 'r--', lw=2, label='best-fit')
-plt.scatter(voltage, current, s=50, label='data')
-#R_squared
-R_squared = r2_score(current,af)
+def diode_eq(V_D, I_s, n):                                      # 다이오드 방정식 정의
+    return I_s*(np.exp((V_D/(n*0.026))-1))
+
+p_num = 7   # 차수 설정
+af = np.poly1d(np.polyfit(voltage[:10], current[:10], p_num))   # 10번째 data까지 다항식으로 근사
+
+I_s=np.mean(current[:7])    # I_s 설정
+
+# V_D > 0.25V(threshold voltage)
+Cmodel = Model(diode_eq)                                    # fitting model 정의
+params = Cmodel.make_params(I_s=I_s, n=2)                   # 초기 parameter 설정
+result = Cmodel.fit(current[10:], params, V_D=voltage[10:]) # 최적화된 parameter값을 포함한
+
+fit_plot = []   # 2개의 근사함수를 하나로 합칠 빈 list 생성
+n1, n2 = 0, 0
+for v in voltage:
+    if v <= 0.25:       # V_D <= 0.25V(threshold voltage)
+        fit_plot.append(af(voltage[n1]))                # 다항함수로 fitting
+        n1 += 1
+    else:               # V_D > 0.25V(threshold voltage)
+        fit_plot.append(result.best_fit.tolist()[n2])   # diode_eq로 fitting
+        n2 += 1
+R_squared=r2_score(current, fit_plot)   # R_squared 저장
+
+# plot(data+best-fit)
+plt.plot(voltage, fit_plot, 'r--', label='best-fit')
+plt.scatter(voltage, current, c='k',s=20, label='data')
 
 position_x, position_y=0.05,0.6  # 초기 위치
 for x, y in zip([-2, -1, 1], [current[voltage == -2][0], current[voltage == -1][0], current[voltage == 1.0][0]]):
@@ -47,7 +69,7 @@ for x, y in zip([-2, -1, 1], [current[voltage == -2][0], current[voltage == -1][
         plt.text(position_x, position_y, f"{x}V: {y:.10f}A", transform=plt.gca().transAxes, fontsize=10)
     position_y-=0.1  # y 위치를 변경하여 다음에 표시될 위치 결정
 # R_squared 출력
-plt.text(0.05, 0.7, f"R-squared: {R_squared:.20f}", # 위치 설정, 소수점 20번째 자리까지 출력
+plt.text(0.05, 0.7, f"R-squared: {R_squared:.15f}", # 위치 설정, 소수점 20번째 자리까지 출력
          transform=plt.gca().transAxes, #  Axes 좌표계(transform)를 반환, 축의 상대적인 위치로 0~1의 좌표를 지정
          bbox=dict(facecolor='none', edgecolor='gray', boxstyle='round,pad=0.5'),    # 둥근 모서리 박스 생성
          fontsize=10,fontweight='bold') # 글씨 크기, bold체 적용
@@ -89,7 +111,7 @@ plt.xlabel('Wavelength [nm]', fontdict=total_font_axis)
 plt.ylabel('Measured transmission [dB]', fontdict=total_font_axis)
 plt.legend(ncol=3,loc='lower center', fontsize=9)  # 범례 위치 설정
 plt.grid(True,axis='both', color='gray', alpha=0.5, linestyle='--')  # 가독성을 위해 gird 삽입
-
+ 
 # --------------------------transmission_graph(R_spuared)------------------------------
 
 plt.subplot(2, 3, 2) # 1행 2열의 그래프 중 첫 번째 그래프를 생성
@@ -117,15 +139,14 @@ for i, af, R_squared in best_fit_list:
              fontsize=8, fontweight='bold')
     position_y -= 0.1
 
-
 plt.title('Transmission spectra - processed and fitting', fontdict=total_font_title)
 plt.xlabel('Wavelength [nm]', fontdict=total_font_axis)
 plt.ylabel('Measured transmission [dB]', fontdict=total_font_axis)
-plt.legend(ncol=3,loc='lower center', fontsize=9)  # 범례 위치 설정
+plt.legend(ncol=4,loc='lower right', fontsize=8)  # 범례 위치 설정
 plt.grid(True,axis='both', color='gray', alpha=0.5, linestyle='--')  # 가독성을 위해 gird 삽입
 
 plt.suptitle('Total Graph', fontsize= 15, weight='bold')
-
+plt.subplots_adjust(hspace=0.3)
 
 plt.savefig('total.png')      # 저장
 plt.show()
