@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 import pandas as pd
+from datetime import datetime
 
 #--------------------Font설정-----------------------------------------
 total_font_axis = {'weight': 'bold', 'size': 10}
@@ -152,13 +153,15 @@ plt.savefig('lec08.png')
 plt.show()
 
 def Data_csv():
-    Wafer, Mask, TestSite, Name, Date, Operator, Row, Column, Analysis_Wavelength = []*9
+    Lot, Wafer, Mask, TestSite, Name, Date_befor, Operator, Row, Column, Analysis_Wavelength = [],[],[],[],[],[],[],[],[],[]
     for data in root.iter():
         if data.tag == 'OIOMeasurement':
-            Date.append(data.get('CreationDate'))
+            Date_befor.append(data.get('CreationDate'))
             Operator.append(data.get('Operator'))
 
+
         elif data.tag == 'TestSiteInfo':
+            Lot.append(data.get('Batch'))
             Column.append(data.get('DieColumn'))
             Row.append(data.get('DieRow'))
             TestSite.append(data.get('TestSite'))
@@ -172,12 +175,17 @@ def Data_csv():
             if data.attrib.get('symbol') == 'WL':
                 Analysis_Wavelength.append(data.text)
 
-    return Wafer, Mask, TestSite, Name, Date, Operator, Row, Column, Analysis_Wavelength
+    return Lot, Wafer, Mask, TestSite, Name, Date_befor, Operator, Row, Column, Analysis_Wavelength
 
-Wafer, Mask, TestSite, Name, Date, Operator, Row, Column, Analysis_Wavelength = Data_csv()
-
-Exel_data = pd.DataFrame({'Wafer': Wafer, 'Mask': Mask, 'TestSite':TestSite, 'Name':Name, 'Date':Date
-                          })
+Lot, Wafer, Mask, TestSite, Name, Date_befor, Operator, Row, Column, Analysis_Wavelength = Data_csv()
 
 
 
+Exel_data = pd.DataFrame({'Lot': Lot,'Wafer': Wafer, 'Mask': Mask, 'TestSite':TestSite, 'Name':Name, 'Date':Date,
+                          'Script ID': {여기},'Script Version': {여기},'Operator': Operator, 'Row': Row, 'Column': Column,
+                          'ErrorFlag': {여기}, 'Error description': {여기}, 'Analysis Wavelength': Analysis_Wavelength,
+                          'Rsq of Ref.spectrum (Nth)':{여기}, 'Max transmission of Ref. spec. (dB)': {여기},
+                          'Rsq of IV': {여기}, 'I at -1V [A]':{여기}, 'I at -2V [A]':{여기}})
+
+
+Exel_data.to_csv('HY202103_D08_(0,2)_LION1_DCM_LMZC.csv')
