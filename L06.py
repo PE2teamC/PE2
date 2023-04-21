@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 import pandas as pd
-from datetime import datetime
+import datetime
 
 #--------------------Font설정-----------------------------------------
 total_font_axis = {'weight': 'bold', 'size': 10}
