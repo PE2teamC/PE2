@@ -152,14 +152,14 @@ plt.grid(True,axis='both', color='gray', alpha=0.5, linestyle='--')  # 주석: �
 plt.savefig('lec08.png')
 plt.show()
 
+#panda이용하여 data를 csv파일로 만들기
 def Data_csv():
-    Lot, Wafer, Mask, TestSite, Name, Date_befor, Operator, Row, Column, Analysis_Wavelength = [],[],[],[],[],[],[],[],[],[]
+    Lot, Wafer, Mask, TestSite, Name1, Date_befor, Operator, Row, Column, Analysis_Wavelength = [],[],[],[],[],[],[],[],[],[]
     for data in root.iter():
         if data.tag == 'OIOMeasurement':
             Date_befor.append(data.get('CreationDate'))
+        elif data.tag =='ModulatorSite':
             Operator.append(data.get('Operator'))
-
-
         elif data.tag == 'TestSiteInfo':
             Lot.append(data.get('Batch'))
             Column.append(data.get('DieColumn'))
@@ -167,25 +167,46 @@ def Data_csv():
             TestSite.append(data.get('TestSite'))
             Wafer.append(data.get('Wafer'))
             Mask.append(data.get('Maskset'))
+        elif data.tag == 'DeviceInfo':
+            Name1.append(data.get('Name'))
+        elif data.tag == 'DesignParameter' and data.attrib.get('Symbol') == 'WL':
+            Analysis_Wavelength = [int(data.text)]
 
-        elif data.tag == 'Modulator':
-            Name.append(data.get('Name'))
-
-        elif data.tag == 'DesignParameter':
-            if data.attrib.get('symbol') == 'WL':
-                Analysis_Wavelength.append(data.text)
-
-    return Lot, Wafer, Mask, TestSite, Name, Date_befor, Operator, Row, Column, Analysis_Wavelength
-
-Lot, Wafer, Mask, TestSite, Name, Date_befor, Operator, Row, Column, Analysis_Wavelength = Data_csv()
+    return Lot, Wafer, Mask, TestSite, Name1, Date_befor, Operator, Row, Column, Analysis_Wavelength
 
 
-
+Lot, Wafer, Mask, TestSite, Name1, Date_befor, Operator, Row, Column, Analysis_Wavelength = Data_csv()
+creation_date =datetime.datetime.strptime(Date_befor[0], "%a %b %d %H:%M:%S %Y")
+date_str = creation_date.strftime("%Y%m%d_%H%M%S")
+Date = [date_str]
+Name = [Name1[0]]
+Script_ID = ['process LMZ']
+Script_Version = ['0.1']
+errorflag, error_description, ref_spectrum,maxtrans,Rsq_IV,I_minus1V, I_plus1V = [], [], [], [], [], [], []
+R_squared = r2_score(tm,af)
+ref_spectrum.append(R_squared)
+if R_squared >= 0.95:
+    errorflag.append('0')
+    error_description.append('No error')
+else :
+    errorflag.append('1')
+    error_description.append("Ref.spec.Error")
+maxtrans.append(max(tm))
+afc = np.polyfit(voltage, current, 12)
+af = np.polyval(afc,voltage)
+R_squared = r2_score(current,af)
+Rsq_IV.append(R_squared)
+a = np.where(voltage == -1)
+b = np.where(voltage == 1)
+I_minus1V.append(current[a])
+I_plus1V.append(current[b])
+I_minus1V_str = [float(I_minus1V[0])]
+I_plus1V_str = [float(I_plus1V[0])]
 Exel_data = pd.DataFrame({'Lot': Lot,'Wafer': Wafer, 'Mask': Mask, 'TestSite':TestSite, 'Name':Name, 'Date':Date,
-                          'Script ID': {여기},'Script Version': {여기},'Operator': Operator, 'Row': Row, 'Column': Column,
-                          'ErrorFlag': {여기}, 'Error description': {여기}, 'Analysis Wavelength': Analysis_Wavelength,
-                          'Rsq of Ref.spectrum (Nth)':{여기}, 'Max transmission of Ref. spec. (dB)': {여기},
-                          'Rsq of IV': {여기}, 'I at -1V [A]':{여기}, 'I at -2V [A]':{여기}})
+                          'Script ID': Script_ID,'Script Version': Script_Version,'Operator': Operator, 'Row': Row, 'Column': Column,
+                          'ErrorFlag': errorflag, 'Error description': error_description, 'Analysis Wavelength': Analysis_Wavelength,
+                          'Rsq of Ref.spectrum (Nth)':ref_spectrum, 'Max transmission of Ref. spec. (dB)': maxtrans,
+                          'Rsq of IV': Rsq_IV, 'I at -1V [A]':I_minus1V_str, 'I at 1V [A]': I_plus1V_str})
 
 
-Exel_data.to_csv('HY202103_D08_(0,2)_LION1_DCM_LMZC.csv')
+Exel_data.to_csv('AnalysisResult_A2.csv', float_format='%.8e')
