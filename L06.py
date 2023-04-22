@@ -202,28 +202,24 @@ def ScriptVersion():
         print(number)
         return round(number,2)
 S_Version = ScriptVersion()
+
 # --------------------------------------------------------------------------------------------
 import os
 
 user_profile = os.environ['USERPROFILE']
 s = str(user_profile)[9:]
 
+
 def print_num():
     num_dict = {'tjrgus': 'C1', 'wnghks': 'C2', 'ehdgus': 'C3', 'ryfud': 'C4'}
-    a = input('이름을 입력하시오 : ')
 
-    if a == 'tjrgus':
-        return num_dict.get(a)
-    elif a == 'wnghks':
-        return num_dict.get(a)
-    elif a == 'ehdgus':
-        return num_dict.get(a)
-    elif a == 'ryfud':
-        return num_dict.get(a)
-# print(print_num())
-    # return num_dict.get(var)
-    # num_dict = {'1': 'A', '2': 'B', '3': 'C', '4': 'D'}
-    # return num_dict.get(var)
+    while True:
+        a = input('이름을 입력하시오 : ')
+        if a in num_dict:
+            return num_dict[a]
+        else:
+            print('오류: 이름이 존재하지 않습니다.')
+
 # --------------------------------------------------------------------------------------------
 
 def d(a):
@@ -246,6 +242,8 @@ Exel_data = pd.DataFrame({'Lot': Lot,'Wafer': Wafer, 'Mask': Mask, 'TestSite':Te
 
 
 # Exel_data.to_csv('AnalysisResult_C.csv')
+
+
 if not os.path.exists('AnalysisResult_C.csv'):
     Exel_data.to_csv('AnalysisResult_C.csv', index=False, mode='w', encoding='utf-8-sig')
 else:
