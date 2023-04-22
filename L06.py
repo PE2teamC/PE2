@@ -193,8 +193,9 @@ def ScriptVersion():
         f.seek(0)  # 파일 포인터를 파일 시작점으로 이동
         f.write("{:.2f}".format(number))  # 파일 내용을 수정
         f.truncate()  # 파일 크기를 현재 위치로 자름
-        return round(number, 2)
-S_Version = ScriptVersion()
+        print(number)
+        return round(number,2)
+# S_Version = ScriptVersion()
 # --------------------------------------------------------------------------------------------
 import os
 
@@ -228,4 +229,3 @@ if not os.path.exists('AnalysisResult_C.csv'):
     Exel_data.to_csv('AnalysisResult_C.csv', index=False, mode='w', encoding='utf-8-sig')
 else:
     Exel_data.to_csv('AnalysisResult_C.csv', index=False, mode='a', encoding='utf-8-sig', header=False)
-    
