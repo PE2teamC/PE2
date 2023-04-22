@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 import pandas as pd
-import datetime
 
 #--------------------Font설정-----------------------------------------
 total_font_axis = {'weight': 'bold', 'size': 10}
@@ -180,10 +179,6 @@ def Data_csv():
     return Lot, Wafer, Mask, TestSite, Name, Date, Operator, Row, Column, Analysis_Wavelength
 
 Lot, Wafer, Mask, TestSite, Name, Date, Operator, Row, Column, Analysis_Wavelength = Data_csv()
-#---------------------------------------------------------------------------------------------
-creation_date =datetime.datetime.strptime(Date[0], "%a %b %d %H:%M:%S %Y")
-Date_str = creation_date.strftime("%Y%m%d_%H%M%S")
-print(Date_str)
 # --------------------------------------------------------------------------------------------
 def ScriptID(site):
     last_element = site[-1].split("_")[-1]
@@ -194,13 +189,11 @@ ScriptID(TestSite)
 def ScriptVersion():
     with open('Script Version.txt', 'r+') as f:
         number = float(f.read())
-
         number += 0.1
         f.seek(0)  # 파일 포인터를 파일 시작점으로 이동
         f.write("{:.2f}".format(number))  # 파일 내용을 수정
         f.truncate()  # 파일 크기를 현재 위치로 자름
-        print(number)
-        return round(number,2)
+        return round(number, 2)
 S_Version = ScriptVersion()
 # --------------------------------------------------------------------------------------------
 import os
@@ -208,22 +201,9 @@ import os
 user_profile = os.environ['USERPROFILE']
 s = str(user_profile)[9:]
 
-def print_num():
-    num_dict = {'tjrgus': 'C1', 'wnghks': 'C2', 'ehdgus': 'C3', 'ryfud': 'C4'}
-    a = input('이름을 입력하시오 : ')
-
-    if a == 'tjrgus':
-        return num_dict.get(a)
-    elif a == 'wnghks':
-        return num_dict.get(a)
-    elif a == 'ehdgus':
-        return num_dict.get(a)
-    elif a == 'ryfud':
-        return num_dict.get(a)
-# print(print_num())
-    # return num_dict.get(var)
-    # num_dict = {'1': 'A', '2': 'B', '3': 'C', '4': 'D'}
-    # return num_dict.get(var)
+def print_num(var):
+    num_dict = {'rhwng': 'Go', 'dbsmi': 'Yoon', 'jim26': 'Lee', '김교령': 'Kim'}
+    return num_dict.get(var)
 # --------------------------------------------------------------------------------------------
 
 def d(a):
@@ -237,16 +217,15 @@ def d(a):
     return ErrorFlag, ErrorDescription
 ErrorFlag, ErrorDescription = d(r2)
 
-Exel_data = pd.DataFrame({'Lot': Lot,'Wafer': Wafer, 'Mask': Mask, 'TestSite':TestSite, 'Name':Name, 'Date':Date_str,
-                          'Script ID': ScriptID(TestSite),'Script Version': S_Version,'Script Owner':print_num(),
-                          'Operator': Operator,'Row': Row, 'Column': Column,'ErrorFlag': ErrorFlag,
-                          'Error description': ErrorDescription,'Analysis Wavelength': Analysis_Wavelength,
-                          'Rsq of Ref.spectrum (Nth)':max(r2),'Max transmission of Ref. spec. (dB)': np.max(tm),
+Exel_data = pd.DataFrame({'Lot': Lot,'Wafer': Wafer, 'Mask': Mask, 'TestSite':TestSite, 'Name':Name, 'Date':Date,
+                          'Script ID': ScriptID(TestSite),'Script Version': ScriptVersion(),'Script Owner':print_num(s),'Operator': Operator, 'Row': Row, 'Column': Column,
+                          'ErrorFlag': ErrorFlag, 'Error description': ErrorDescription, 'Analysis Wavelength': Analysis_Wavelength,
+                          'Rsq of Ref.spectrum (Nth)':max(r2), 'Max transmission of Ref. spec. (dB)': np.max(tm),
                           'Rsq of IV': R_squared, 'I at -1V [A]':current[4], 'I at -2V [A]':abs(current[-1])})
 
 
-# Exel_data.to_csv('AnalysisResult_C.csv')
 if not os.path.exists('AnalysisResult_C.csv'):
     Exel_data.to_csv('AnalysisResult_C.csv', index=False, mode='w', encoding='utf-8-sig')
 else:
     Exel_data.to_csv('AnalysisResult_C.csv', index=False, mode='a', encoding='utf-8-sig', header=False)
+    
