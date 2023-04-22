@@ -92,10 +92,12 @@ import warnings
 warnings.filterwarnings('ignore', message='Polyfit may be poorly conditioned')
 
 best_fit_list = []
+r2=[]
 for i in range(1, 9):
     afc = np.polyfit(wl, tm, i)
     af = np.polyval(afc, wl)
     R_squared = r2_score(tm, af)
+    r2.append(R_squared)
     best_fit_list.append((i, af, R_squared))
     plt.plot(wl, af, plot_color[i], lw=2, label=f'{i}th')
     plt.scatter(wl, tm, s=10)
@@ -150,16 +152,15 @@ plt.ylabel('Measured transmission [dB]', fontdict=font_axis)  # 주석: y축 레
 plt.grid(True,axis='both', color='gray', alpha=0.5, linestyle='--')  # 주석: 그리드 추가
 
 plt.savefig('lec08.png')
-plt.show()
-
-#panda이용하여 data를 csv파일로 만들기
+# plt.show()
+#-------------------------------
 def Data_csv():
-    Lot, Wafer, Mask, TestSite, Name1, Date_befor, Operator, Row, Column, Analysis_Wavelength = [],[],[],[],[],[],[],[],[],[]
+    Lot, Wafer, Mask, TestSite, Name, Date, Operator, Row, Column, Analysis_Wavelength = [],[],[],[],[],[],[],[],[],[]
     for data in root.iter():
         if data.tag == 'OIOMeasurement':
-            Date_befor.append(data.get('CreationDate'))
-        elif data.tag =='ModulatorSite':
+            Date.append(data.get('CreationDate'))
             Operator.append(data.get('Operator'))
+
         elif data.tag == 'TestSiteInfo':
             Lot.append(data.get('Batch'))
             Column.append(data.get('DieColumn'))
@@ -167,46 +168,81 @@ def Data_csv():
             TestSite.append(data.get('TestSite'))
             Wafer.append(data.get('Wafer'))
             Mask.append(data.get('Maskset'))
-        elif data.tag == 'DeviceInfo':
-            Name1.append(data.get('Name'))
-        elif data.tag == 'DesignParameter' and data.attrib.get('Symbol') == 'WL':
-            Analysis_Wavelength = [int(data.text)]
 
-    return Lot, Wafer, Mask, TestSite, Name1, Date_befor, Operator, Row, Column, Analysis_Wavelength
+        elif data.tag == 'ModulatorSite':
+            Name.append(data.find('Modulator').get('Name'))
 
-
-Lot, Wafer, Mask, TestSite, Name1, Date_befor, Operator, Row, Column, Analysis_Wavelength = Data_csv()
-creation_date =datetime.datetime.strptime(Date_befor[0], "%a %b %d %H:%M:%S %Y")
-date_str = creation_date.strftime("%Y%m%d_%H%M%S")
-Date = [date_str]
-Name = [Name1[0]]
-Script_ID = ['process LMZ']
-Script_Version = ['0.1']
-errorflag, error_description, ref_spectrum,maxtrans,Rsq_IV,I_minus1V, I_plus1V = [], [], [], [], [], [], []
-R_squared = r2_score(tm,af)
-ref_spectrum.append(R_squared)
-if R_squared >= 0.95:
-    errorflag.append('0')
-    error_description.append('No error')
-else :
-    errorflag.append('1')
-    error_description.append("Ref.spec.Error")
-maxtrans.append(max(tm))
-afc = np.polyfit(voltage, current, 12)
-af = np.polyval(afc,voltage)
-R_squared = r2_score(current,af)
-Rsq_IV.append(R_squared)
-a = np.where(voltage == -1)
-b = np.where(voltage == 1)
-I_minus1V.append(current[a])
-I_plus1V.append(current[b])
-I_minus1V_str = [float(I_minus1V[0])]
-I_plus1V_str = [float(I_plus1V[0])]
-Exel_data = pd.DataFrame({'Lot': Lot,'Wafer': Wafer, 'Mask': Mask, 'TestSite':TestSite, 'Name':Name, 'Date':Date,
-                          'Script ID': Script_ID,'Script Version': Script_Version,'Operator': Operator, 'Row': Row, 'Column': Column,
-                          'ErrorFlag': errorflag, 'Error description': error_description, 'Analysis Wavelength': Analysis_Wavelength,
-                          'Rsq of Ref.spectrum (Nth)':ref_spectrum, 'Max transmission of Ref. spec. (dB)': maxtrans,
-                          'Rsq of IV': Rsq_IV, 'I at -1V [A]':I_minus1V_str, 'I at 1V [A]': I_plus1V_str})
+        elif data.tag == 'DesignParameter':
+            if data.attrib.get('Name') == 'Design wavelength':
+                Analysis_Wavelength.append(data.text)
 
 
-Exel_data.to_csv('AnalysisResult_A2.csv', float_format='%.8e')
+    return Lot, Wafer, Mask, TestSite, Name, Date, Operator, Row, Column, Analysis_Wavelength
+
+Lot, Wafer, Mask, TestSite, Name, Date, Operator, Row, Column, Analysis_Wavelength = Data_csv()
+#---------------------------------------------------------------------------------------------
+creation_date =datetime.datetime.strptime(Date[0], "%a %b %d %H:%M:%S %Y")
+Date_str = creation_date.strftime("%Y%m%d_%H%M%S")
+print(Date_str)
+# --------------------------------------------------------------------------------------------
+def ScriptID(site):
+    last_element = site[-1].split("_")[-1]
+    return last_element.replace("C", "")
+
+ScriptID(TestSite)
+# --------------------------------------------------------------------------------------------
+def ScriptVersion():
+    with open('Script Version.txt', 'r+') as f:
+        number = float(f.read())
+
+        number += 0.1
+        f.seek(0)  # 파일 포인터를 파일 시작점으로 이동
+        f.write("{:.2f}".format(number))  # 파일 내용을 수정
+        f.truncate()  # 파일 크기를 현재 위치로 자름
+        print(number)
+        return round(number,2)
+S_Version = ScriptVersion()
+# --------------------------------------------------------------------------------------------
+import os
+
+user_profile = os.environ['USERPROFILE']
+s = str(user_profile)[9:]
+
+def print_num():
+    num_dict = {'tjrgus': 'C1', 'wnghks': 'C2', 'ehdgus': 'C3', 'ryfud': 'C4'}
+    a = input('이름을 입력하시오 : ')
+
+    if a == 'tjrgus':
+        return num_dict.get(a)
+    elif a == 'wnghks':
+        return num_dict.get(a)
+    elif a == 'ehdgus':
+        return num_dict.get(a)
+    elif a == 'ryfud':
+        return num_dict.get(a)
+# print(print_num())
+    # return num_dict.get(var)
+    # num_dict = {'1': 'A', '2': 'B', '3': 'C', '4': 'D'}
+    # return num_dict.get(var)
+# --------------------------------------------------------------------------------------------
+
+def d(a):
+    b=max(a)
+    if b >= 0.95:
+        ErrorFlag = 0
+        ErrorDescription = "No Error"
+    else:
+        ErrorFlag = 1
+        ErrorDescription = "Ref. spec. Error"
+    return ErrorFlag, ErrorDescription
+ErrorFlag, ErrorDescription = d(r2)
+
+Exel_data = pd.DataFrame({'Lot': Lot,'Wafer': Wafer, 'Mask': Mask, 'TestSite':TestSite, 'Name':Name, 'Date':Date_str,
+                          'Script ID': ScriptID(TestSite),'Script Version': S_Version,'Script Owner':print_num(),
+                          'Operator': Operator,'Row': Row, 'Column': Column,'ErrorFlag': ErrorFlag,
+                          'Error description': ErrorDescription,'Analysis Wavelength': Analysis_Wavelength,
+                          'Rsq of Ref.spectrum (Nth)':max(r2),'Max transmission of Ref. spec. (dB)': np.max(tm),
+                          'Rsq of IV': R_squared, 'I at -1V [A]':current[4], 'I at -2V [A]':abs(current[-1])})
+
+
+Exel_data.to_csv('AnalysisResult_C.csv')
