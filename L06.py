@@ -245,4 +245,8 @@ Exel_data = pd.DataFrame({'Lot': Lot,'Wafer': Wafer, 'Mask': Mask, 'TestSite':Te
                           'Rsq of IV': R_squared, 'I at -1V [A]':current[4], 'I at -2V [A]':abs(current[-1])})
 
 
-Exel_data.to_csv('AnalysisResult_C.csv')
+# Exel_data.to_csv('AnalysisResult_C.csv')
+if not os.path.exists('AnalysisResult_C.csv'):
+    Exel_data.to_csv('AnalysisResult_C.csv', index=False, mode='w', encoding='utf-8-sig')
+else:
+    Exel_data.to_csv('AnalysisResult_C.csv', index=False, mode='a', encoding='utf-8-sig', header=False)
