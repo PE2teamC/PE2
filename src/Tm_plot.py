@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 import warnings
-
+#
 #--------------------Font설정-----------------------------------------
 total_font_axis = {'weight': 'bold', 'size': 10}
 total_font_title = {'weight': 'bold', 'size': 12}
