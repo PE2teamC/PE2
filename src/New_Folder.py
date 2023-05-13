@@ -6,7 +6,7 @@ now = datetime.now()
 def NewFolder(path):
     try:
         if not os.path.exists(path):
-            os.mkdir(path)
+            os.makedirs(path)
     except OSError:
         print('Error : Creating Directory '+path)
 
