@@ -186,4 +186,3 @@ elif show == 1 and png == 1 and csv == 1:
         time.sleep(0.1)
     Create_csv(four_files,Owner)
     print('\n[프로그램을 종료합니다.]')
- 
