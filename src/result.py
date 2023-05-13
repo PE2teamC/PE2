@@ -20,7 +20,6 @@ for row in range(-4, 4):
 device_type = str(input('원하는 장치 유형을 입력하세요. (ex. LMZC, LMZO, LMZ): '))
 if device_type == 'LMZ':
     initial_files = LMZ_files
-    print(initial_files)
 elif device_type == 'LMZO':
     for file in LMZ_files:
         if device_type in file:
@@ -37,7 +36,7 @@ if not initial_files:
 
 wafer_num = list(map(str, input('원하는 웨이퍼 번호를 "D##" 형태로 입력하세요.'
                                 ' (ex. D07, D08, D23, D24, all): ').split()))
-
+d_list = []
 if wafer_num[0] == 'all':
     for wafer in wafer_list:
         for i_file in initial_files:
@@ -49,15 +48,18 @@ else:
             for i_file in initial_files:
                 if wafer in i_file:
                     sec_files.append(i_file)
-                    print(sec_files)
+                    d = str(i_file)[8:16]
+                    if d not in d_list:
+                        d_list.append(d)
+                        d_str = ', '.join(d_list)
+
         else:
             print(f'Error : {wafer}은(는) 존재하지 않습니다.')
 if not sec_files:
     print('\n[Data가 존재하지 않습니다.]')
     sys.exit()
 
-#-------------------------------------------------------------------------------
-Date_file = list(map(str,input('측정 날짜를 입력하세요. (ex 20YYMMDD , all) : ').split()))
+Date_file = list(map(str,input(f'측정 날짜를 입력하세요. ({d_str}, all) : ').split()))
 
 if Date_file[0] == 'all':
     for s_file in sec_files:
@@ -67,7 +69,6 @@ else:
         for s_file in sec_files:
             if date in s_file:
                 thir_files.append(s_file)
-                print(thir_files)
             else:
                 print(f'Error : {date}은(는) 존재하지 않습니다.')
 if not thir_files:
@@ -89,7 +90,6 @@ else:
             for s_file in thir_files:
                 if coord in s_file:
                     four_files.append(s_file)
-                    print(four_files)
         else:
             print(f'Error : {coord}은(는) 존재하지 않습니다.')
 if not four_files:
