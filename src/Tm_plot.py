@@ -3,17 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import r2_score
 
+
 def tm_plot(x):
-    xml_file = etree.parse(x)           # load xml file
-    root = xml_file.getroot()           # get root(element) of file
+    xml_file = etree.parse(x)  # load xml file
+    root = xml_file.getroot()  # get root(element) of file
 
-    # setting of font
-    font_title = {              # font setting for title
-        'family': 'monospace',  # font style
-        'weight': 'bold',       # font weight
-        'size': 15              # font size
-    }
-
+    font_axis = {'weight': 'bold', 'size': 10}
+    font_title = {'weight': 'bold', 'size': 12}
     # Wavelength-Transmission(Raw data)
     wl_list, tm_list = [], []
     wl_ref, tm_ref = [], []
@@ -34,8 +30,8 @@ def tm_plot(x):
                 color_number += 1
 
             plt.title('Transmission spectra - as measured', fontdict=font_title)
-            plt.xlabel('Wavelength[nm]', fontsize=10)
-            plt.ylabel('Measured transmission[dB]', fontsize=10)
+            plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+            plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
             plt.legend(loc='lower center', ncol=2, fontsize=10)
 
         # Reference
@@ -56,9 +52,9 @@ def tm_plot(x):
         plt.plot(wl_ref, fit_eq(wl_ref), label=f'{p}th R² : {r2_score(tm_ref, fit_eq(wl_ref))}')
 
     plt.title('Transmission spectra - as measured', fontdict=font_title)
-    plt.xlabel('Wavelength[nm]', fontsize=10)
-    plt.ylabel('Measured transmission[dB]', fontsize=10)
-    plt.legend(loc='lower center', fontsize=10)
+    plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+    plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
+    plt.legend(loc='lower center', fontsize=8)
 
     DC_bias = -2.0
     plt.subplot(2, 3, 3)
@@ -69,23 +65,22 @@ def tm_plot(x):
         DC_bias += 0.5
 
     plt.title('Flat Transmission spectra - as measured', fontdict=font_title)
-    plt.xlabel('Wavelength[nm]', fontsize=10)
-    plt.ylabel('Measured transmission[dB]', fontsize=10)
+    plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+    plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
     plt.legend(loc='lower center', ncol=2, fontsize=10)
 
-
-
-
-    plt.subplot(2,3,5)
+    plt.subplot(2, 3, 5)
     DC_bias = -2.0
     linear_x = []
     linear_y = []
+
     def find_local_maxima_idx(data):
         maxima_idx = []
         for i in range(200, len(data) - 200):
             if data[i] > max(data[i - 200:i]) and data[i] > max(data[i + 1:i + 200]):
                 maxima_idx.append(i)
         return maxima_idx
+
     for j in range(6):
         maxidx = find_local_maxima_idx(tm_list[j] - fit_eq(wl_list[j]))
         for i in maxidx:
@@ -99,14 +94,14 @@ def tm_plot(x):
 
         af = np.poly1d(afc)
 
-        plt.plot(wl_list[j], tm_list[j] - fit_eq(wl_list[j])- af(wl_list[j]),label=f'DC_bias={DC_bias}V')
-        linear_y=[]
-        linear_x=[]
+        plt.plot(wl_list[j], tm_list[j] - fit_eq(wl_list[j]) - af(wl_list[j]), label=f'DC_bias={DC_bias}V')
+        linear_y = []
+        linear_x = []
         DC_bias += 0.5
 
     plt.title('Flat Transmission spectra - as measured', fontdict=font_title)
-    plt.xlabel('Wavelength[nm]', fontsize=10)
-    plt.ylabel('Measured transmission[dB]', fontsize=10)
+    plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+    plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
     plt.legend(loc='lower center', ncol=2, fontsize=10)
 
     plt.subplot(2, 3, 6)
@@ -115,6 +110,7 @@ def tm_plot(x):
     linear_y = []
     linear_tm = []
     real = []
+
     def find_local_maxima_idx(data):
         maxima_idx = []
         for i in range(200, len(data) - 200):
@@ -136,9 +132,8 @@ def tm_plot(x):
         af = np.poly1d(afc)
         flat_tm_list = [tm - fit_eq(wl) - af(wl) for wl, tm in zip(wl_list[j], tm_list[j])]
 
-
         for k in flat_tm_list:
-            linear_tm.append(10**(k/10))
+            linear_tm.append(10 ** (k / 10))
 
         plt.plot(wl_list[j], linear_tm, label=f'DC_bias={DC_bias}V')
 
@@ -148,6 +143,6 @@ def tm_plot(x):
         DC_bias += 0.5
 
     plt.title('Flat Transmission spectra - as measured', fontdict=font_title)
-    plt.xlabel('Wavelength[nm]', fontsize=10)
-    plt.ylabel('Measured transmission', fontsize=10)
+    plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+    plt.ylabel('Measured transmission', fontdict=font_axis)
     plt.legend(loc='lower center', ncol=2, fontsize=10)
