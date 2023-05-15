@@ -69,8 +69,7 @@ else:
         for s_file in sec_files:
             if date in s_file:
                 thir_files.append(s_file)
-            else:
-                print(f'Error : {date}은(는) 존재하지 않습니다.')
+
 if not thir_files:
     print('\n[Data가 존재하지 않습니다.]')
     sys.exit()
