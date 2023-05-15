@@ -56,9 +56,9 @@ pip install -r requirements.txt
 7. Enter y/n whether to see the data as png file or not
 8. Enter y/n whether to save the data as png file or not
 9. Enter y/n whether to save the data as csv file or not
-10. [Exit the program]
+10. Exit the program
 
-![image](https://github.com/KyoRyoung/PE2/assets/127359402/1c04f06e-9f32-4288-9836-cca99122d13d)
+![image](https://github.com/KyoRyoung/PE2/assets/127359402/93719258-3c0c-4d7e-ab2e-0461c2481728)
 ![image](https://github.com/KyoRyoung/PE2/assets/127359402/da651467-073e-4046-b534-7986311f88b3)
 
 * * *
