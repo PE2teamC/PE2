@@ -36,7 +36,7 @@ while True:
     if show_png == 'y':
         show = 1
         break
-    elif show_png == 'n':
+    elif show_png == 'n': 
         break
     else:
         print('Error : y와 n만 입력할 수 있습니다.')
@@ -114,4 +114,4 @@ elif show == 1 and png == 1 and csv == 1:
         save_plot(f)
         time.sleep(0.1)
     Create_csv(files,Owner)
-    print('\n[프로그램을 종료합니다.]')  
+    print('\n[프로그램을 종료합니다.]')
