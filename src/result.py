@@ -98,6 +98,7 @@ elif show == 0 and png == 1 and csv == 1:
         time.sleep(0.1)
     Create_csv(files,Owner)
     print('\n[프로그램을 종료합니다.]')
+    
 
 elif show == 1 and png == 0 and csv == 1:
     for f in tqdm(files, desc='Showing png files '):
@@ -114,4 +115,4 @@ elif show == 1 and png == 1 and csv == 1:
         save_plot(f)
         time.sleep(0.1)
     Create_csv(files,Owner)
-    print('\n[프로그램을 종료합니다.]') 
+    print('\n[프로그램을 종료합니다.]')
