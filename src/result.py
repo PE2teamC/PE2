@@ -36,12 +36,12 @@ while True:
     if show_png == 'y':
         show = 1
         break
-    elif show_png == 'n': 
+    elif show_png == 'n':
         break
     else:
         print('Error : y와 n만 입력할 수 있습니다.')
         continue
-
+   
 while True:
     save_png = str(input('png 파일을 저장하겠습니까? (y/n): '))
     if save_png == 'y':
