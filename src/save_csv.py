@@ -20,8 +20,8 @@ def Create_csv(file, Owner):
                                "Script Owner", "Row", "Column", "Error Flag", "Error Description", "Analysis Wavelength(nm)",
                                "Rsq of Ref.spectrum(Nth)", "Max transmission of Ref spec. (dB)", "Rsq of IV", "I at -1V[A]", "I at 1V[A]"])
 
-    path = './res/csv_files/' + now.strftime('%Y%m%d_%H%M%S')
-    NewFolder(path)
+    path = './res/'
 
-    with pd.ExcelWriter(path + "/Analysis_Result_C.xlsx") as writer:
+    with pd.ExcelWriter(path + f"/Analysis_Result_({now.strftime('%Y%m%d_%H%M%S')}).xlsx") as writer:
         Excel_data.to_excel(writer)
+
