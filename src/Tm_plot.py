@@ -1,111 +1,148 @@
-import xml.etree.ElementTree as ET
-import numpy as np
+import xml.etree.ElementTree as etree
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.metrics import r2_score
-import warnings
 
-#--------------------Font설정-----------------------------------------
-total_font_axis = {'weight': 'bold', 'size': 10}
-total_font_title = {'weight': 'bold', 'size': 12}
-
-font_axis = {'weight': 'bold', 'size': 12}
-font_title = {'weight': 'bold', 'size': 18}
-#---------------------------------------------------------------------
 
 def tm_plot(x):
+    xml_file = etree.parse(x)  # load xml file
+    root = xml_file.getroot()  # get root(element) of file
 
-    xml_file = ET.parse(x)
-    root = xml_file.getroot()
-
-    #----- Wavelength-Transmission(Raw data) ------
-    plt.subplot(2, 3, 1)
-    plot_color = ['lightcoral', 'coral', 'gold', 'lightgreen', 'lightskyblue', 'plum', 'navy', 'black', 'red']
+    font_axis = {'weight': 'bold', 'size': 10}
+    font_title = {'weight': 'bold', 'size': 12}
+    # Wavelength-Transmission(Raw data)
+    wl_list, tm_list = [], []
+    wl_ref, tm_ref = [], []
+    DC_bias = -2.0
+    plot_color = ['lightcoral', 'coral', 'gold', 'lightgreen', 'lightskyblue', 'plum']
     color_number = 0
 
-    wl, tm = [], []
-    DC_bias = -2.0
+    plt.subplot(2, 3, 1)
     for i in root.iter():
         if i.tag == 'WavelengthSweep':
             if i.attrib.get('DCBias') == str(DC_bias):
                 wl = list(map(float, i.find('L').text.split(',')))
+                wl_list.append(wl)
                 tm = list(map(float, i.find('IL').text.split(',')))
-                plt.plot(wl, tm, plot_color[color_number], label=f'{DC_bias}V')
+                tm_list.append(tm)
+                plt.plot(wl, tm, plot_color[color_number], label=f'DCBias = {DC_bias}V')
                 DC_bias += 0.5
                 color_number += 1
+
+            plt.title('Transmission spectra - as measured', fontdict=font_title)
+            plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+            plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
+            plt.legend(loc='lower center', ncol=2, fontsize=10)
+
+        # Reference
         elif i.tag == 'Modulator':
-            if i.attrib.get('Name') == 'DCM_LMZC_ALIGN':
-                wl = list(map(float, i.find('PortCombo').find('WavelengthSweep').find('L').text.split(',')))
-                tm = list(map(float, i.find('PortCombo').find('WavelengthSweep').find('IL').text.split(',')))
-                plt.plot(wl, tm, color='purple', linestyle=':')
+            if i.attrib.get('Name') == 'DCM_LMZC_ALIGN' or i.attrib.get('Name') == 'DCM_LMZO_ALIGN':
+                wl_ref = list(map(float, i.find('PortCombo').find('WavelengthSweep').find('L').text.split(',')))
+                tm_ref = list(map(float, i.find('PortCombo').find('WavelengthSweep').find('IL').text.split(',')))
+                plt.plot(wl_ref, tm_ref, color='#7f7f7f', linestyle=':', label='Reference')
+                plt.subplot(2, 3, 2)
+                plt.plot(wl_ref, tm_ref, color='#7f7f7f', linestyle=':', label='Reference')
 
+    # Wavelength-Transmission(Fitting)
+    rsq_ref = []
+    for p in range(1, 9):
+        fit = np.polyfit(np.array(wl_ref), np.array(tm_ref), p)
+        fit_eq = np.poly1d(fit)
+        rsq_ref.append(r2_score(tm_ref, fit_eq(wl_ref)))
+        plt.plot(wl_ref, fit_eq(wl_ref), label=f'{p}th R² : {r2_score(tm_ref, fit_eq(wl_ref))}')
 
-    plt.title('Transmission spectra - as measured', fontdict=total_font_title)
-    plt.xlabel('Wavelength [nm]', fontdict=total_font_axis)
-    plt.ylabel('Measured transmission [dB]', fontdict=total_font_axis)
-    plt.legend(ncol=3,loc='lower center', fontsize=9)
-    plt.grid(True,axis='both', color='gray', alpha=0.5, linestyle='--')
+    plt.title('Transmission spectra - as measured', fontdict=font_title)
+    plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+    plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
+    plt.legend(loc='lower center', fontsize=8)
 
-    # --------------------------transmission_graph(R_spuared)------------------------------
-    plt.subplot(2, 3, 2)
-
-    warnings.filterwarnings('ignore', message='Polyfit may be poorly conditioned')
-
-    best_fit_list = []
-    r2=[]
-    for i in range(1, 9):
-        afc = np.polyfit(wl, tm, i)
-        af = np.polyval(afc, wl)
-        R_squared = r2_score(tm, af)
-        r2.append(R_squared)
-        best_fit_list.append((i, af, R_squared))
-        plt.plot(wl, af, plot_color[i], lw=2, label=f'{i}th')
-        plt.scatter(wl, tm, s=10)
-
-    best_fit_list = sorted(best_fit_list, key=lambda x: abs(x[2] - 1))[:3]
-
-    position_x, position_y = 0.4, 0.5
-    for i, af, R_squared in best_fit_list:
-        text_color = 'red' if R_squared == max([item[2] for item in best_fit_list]) else 'black'
-        plt.text(position_x, position_y, f'Degree: {i}\nR_squared: {R_squared:.15f}',
-                 color=text_color,
-                 transform=plt.gca().transAxes,
-                 fontsize=8, fontweight='bold')
-        position_y -= 0.1
-
-
-    plt.title('Transmission spectra - processed and fitting', fontdict=total_font_title)
-    plt.xlabel('Wavelength [nm]', fontdict=total_font_axis)
-    plt.ylabel('Measured transmission [dB]', fontdict=total_font_axis)
-    plt.legend(ncol=3,loc='lower center', fontsize=9)
-    plt.grid(True,axis='both', color='gray', alpha=0.5, linestyle='--')
-    #-------------------------Flat Transmission spectra--------------------------------------
-
-    afc = np.polyfit(wl,tm,8)
-    af = np.polyval(afc,wl)
-
-    plt.subplot(2,3,3)
-    color_number=0
     DC_bias = -2.0
+    plt.subplot(2, 3, 3)
 
-    for i in root.iter():
-        if i.tag == 'WavelengthSweep':
-            if i.attrib.get('DCBias') == str(DC_bias):
-                wl1 = list(map(float, i.find('L').text.split(',')))
-                tm1 = list(map(float, i.find('IL').text.split(',')))
-                tm_flat = []  #ref 값을 뺸 transmission값
-                for k in range(len(tm1)):
-                    a = tm1[k] - af[k]
-                    tm_flat.append(a)
-                plt.plot(wl1, tm_flat, plot_color[color_number], label=f'{DC_bias}V')
-                DC_bias += 0.5
-                color_number += 1
-    ref_flat = [] #ref값도 평평하게 만들기
-    for k in range(len(tm)):
-        a = tm[k] - af[k]
-        ref_flat.append(a)
-    plt.plot(wl, ref_flat, color='r', linestyle=':')
-    plt.legend(ncol=3, loc='lower center', fontsize=10)
-    plt.title('Flat Transmission spectra - as measured', fontdict=total_font_title)
-    plt.xlabel('Wavelength [nm]', fontdict=total_font_axis)
-    plt.ylabel('Measured transmission [dB]', fontdict=total_font_axis)
-    plt.grid(True,axis='both', color='gray', alpha=0.5, linestyle='--')
+    for j in range(6):
+        plt.plot(wl_ref, tm_ref - fit_eq(wl_ref))
+        plt.plot(wl_list[j], tm_list[j] - fit_eq(wl_list[j]), plot_color[j], label=f'DC_bias={DC_bias}V')
+        DC_bias += 0.5
+
+    plt.title('Flat Transmission spectra - as measured', fontdict=font_title)
+    plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+    plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
+    plt.legend(loc='lower center', ncol=2, fontsize=10)
+
+    plt.subplot(2, 3, 5)
+    DC_bias = -2.0
+    linear_x = []
+    linear_y = []
+
+    def find_local_maxima_idx(data):
+        maxima_idx = []
+        for i in range(200, len(data) - 200):
+            if data[i] > max(data[i - 200:i]) and data[i] > max(data[i + 1:i + 200]):
+                maxima_idx.append(i)
+        return maxima_idx
+
+    for j in range(6):
+        maxidx = find_local_maxima_idx(tm_list[j] - fit_eq(wl_list[j]))
+        for i in maxidx:
+            linear_x.append(wl_list[j][i])
+            linear_y.append(tm_list[j][i] - fit_eq(wl_list[j][i]))
+        # print(linear_x)
+        # print(linear_y)
+
+        afc = np.polyfit(linear_x, linear_y, 1)
+        # poly1d 함수를 사용하여 1차 근사 함수를 만듦
+
+        af = np.poly1d(afc)
+
+        plt.plot(wl_list[j], tm_list[j] - fit_eq(wl_list[j]) - af(wl_list[j]), label=f'DC_bias={DC_bias}V')
+        linear_y = []
+        linear_x = []
+        DC_bias += 0.5
+
+    plt.title('Flat Transmission spectra - as measured', fontdict=font_title)
+    plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+    plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
+    plt.legend(loc='lower center', ncol=2, fontsize=10)
+
+    plt.subplot(2, 3, 6)
+    DC_bias = -2.0
+    linear_x = []
+    linear_y = []
+    linear_tm = []
+    real = []
+
+    def find_local_maxima_idx(data):
+        maxima_idx = []
+        for i in range(200, len(data) - 200):
+            if data[i] > max(data[i - 200:i]) and data[i] > max(data[i + 1:i + 200]):
+                maxima_idx.append(i)
+        return maxima_idx
+
+    for j in range(6):
+        maxidx = find_local_maxima_idx(tm_list[j] - fit_eq(wl_list[j]))
+        for i in maxidx:
+            linear_x.append(wl_list[j][i])
+            linear_y.append(tm_list[j][i] - fit_eq(wl_list[j][i]))
+        # print(linear_x)
+        # print(linear_y)
+
+        afc = np.polyfit(linear_x, linear_y, 1)
+        # poly1d 함수를 사용하여 1차 근사 함수를 만듦
+
+        af = np.poly1d(afc)
+        flat_tm_list = [tm - fit_eq(wl) - af(wl) for wl, tm in zip(wl_list[j], tm_list[j])]
+
+        for k in flat_tm_list:
+            linear_tm.append(10 ** (k / 10))
+
+        plt.plot(wl_list[j], linear_tm, label=f'DC_bias={DC_bias}V')
+
+        linear_y = []
+        linear_x = []
+        linear_tm = []
+        DC_bias += 0.5
+
+    plt.title('Flat Transmission spectra - as measured', fontdict=font_title)
+    plt.xlabel('Wavelength[nm]', fontdict=font_axis)
+    plt.ylabel('Measured transmission', fontdict=font_axis)
+    plt.legend(loc='lower center', ncol=2, fontsize=10)
