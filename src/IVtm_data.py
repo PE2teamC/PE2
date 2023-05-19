@@ -56,7 +56,7 @@ def data_tm(x):
     root = xml_file.getroot()
     for i in root.iter():
         if i.tag == 'Modulator':
-            if i.attrib.get('Name') == 'DCM_LMZC_ALIGN':
+            if i.attrib.get('Designer') == 'pdheyn':
                 wl = list(map(float, i.find('PortCombo').find('WavelengthSweep').find('L').text.split(',')))
                 tm = list(map(float, i.find('PortCombo').find('WavelengthSweep').find('IL').text.split(',')))
 
@@ -79,3 +79,4 @@ def data_tm(x):
     max_tm = np.max(tm)
 
     return r2_tm, max_tm, ErrorFlag, ErrorDescription
+
