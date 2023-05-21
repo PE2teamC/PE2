@@ -137,11 +137,10 @@ dmypy.json
 cython_debug/
 
 # project specific
-data/HY*
+dat/HY*
 
 # intellij configs
 .idea/
 
 # result file
 res/HY*
-res/
