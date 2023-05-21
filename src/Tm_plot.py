@@ -146,4 +146,3 @@ def tm_plot(x):
     plt.xlabel('Wavelength[nm]', fontdict=font_axis)
     plt.ylabel('Measured transmission', fontdict=font_axis)
     plt.legend(loc='lower center', ncol=2, fontsize=10)
-

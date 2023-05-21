@@ -22,9 +22,12 @@ def save_plot(x):
     tm_plot(x)
     IV_plot(x)
 
-    path = './res/png_files/'+now.strftime('%Y%m%d_%H%M%S')
-    NewFolder(path)
-    plt.savefig(path+'/'+x[x.find('(')-13:x.find(')')+16]+'.png')
+    path1 = './res/' + f'{x[4:12]}'
+    path2 = path1 + f'{x[12:16]}'
+    path3 = path2 +  f'{x[16:32]}'
+    NewFolder(path3)
+
+    plt.savefig(path3+'/'+x[x.find('(')-13:x.find(')')+16]+'.png')
 
 
 
