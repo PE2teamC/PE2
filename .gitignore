@@ -144,3 +144,7 @@ dat/HY*
 
 # result file
 res/HY*
+res/An*
+
+#doc file
+doc/P*
