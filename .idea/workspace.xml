@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d57b0905-dbc2-4e19-9191-f040ee80f91f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="d57b0905-dbc2-4e19-9191-f040ee80f91f" name="Changes" comment="오류 메세지 수정 및 tm 1차함수 추출, y축 linear화">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Tm_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tm_plot.py" afterDir="false" />
     </list>
@@ -41,14 +40,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/rhwng/PycharmProjects/Engineering_Programming2",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/rhwng/PycharmProjects/Engineering_Programming2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\rhwng\PycharmProjects\PE2" />
@@ -183,7 +182,21 @@
       <option name="project" value="LOCAL" />
       <updated>1683203789601</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="오류 메세지 수정 및 tm 1차함수 추출, y축 linear화">
+      <created>1684112661314</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1684112661314</updated>
+    </task>
+    <task id="LOCAL-00012" summary="오류 메세지 수정 및 tm 1차함수 추출, y축 linear화">
+      <created>1684115097970</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1684115097970</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -195,6 +208,7 @@
     <MESSAGE value="wavelength fitting, R_squared&#10;&#10;+best Degree real2" />
     <MESSAGE value="aaaa" />
     <MESSAGE value="test commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="test commit" />
+    <MESSAGE value="오류 메세지 수정 및 tm 1차함수 추출, y축 linear화" />
+    <option name="LAST_COMMIT_MESSAGE" value="오류 메세지 수정 및 tm 1차함수 추출, y축 linear화" />
   </component>
 </project>
