@@ -151,7 +151,7 @@ def tm_plot(x):
 
     result = model.fit(linear_tm, wave_length=wl_list[v0ind])
     n_eff_value = result.best_values['n_eff']
-    print(n_eff_value)
+    # print(n_eff_value)
 
     bias=[-2.0,-1.5,-1.0,-0.5,0.0,0.5]
     linear_x = []
@@ -191,12 +191,9 @@ def tm_plot(x):
         fresult = fmodel.fit(linear_tm, params, wave_length=wl_list[j])
         plt.plot(wl_list[j], fresult.best_fit,label=f'DCBias = {DC_bias}V fit')
         delta_n_eff_value = fresult.best_values['delta_n_eff']
-        print(fresult.best_values)
+
         delta_n_eff_list.append(delta_n_eff_value)
-            # delta_n_eff=b_value
-            # plt.plot(wl_list[4], linear_tm, 'r')
-        # plt.plot(wl_list[j], fresult.best_fit, plot_color[j])
-            # plt.plot(wl_list[j], linear_tm, label=f'DC_bias={DC_bias}V')
+
 
         linear_y = []
         linear_x = []
@@ -212,83 +209,4 @@ def tm_plot(x):
     plt.title('n-V graph', fontdict=font_title)
     plt.xlabel('voltage [V]', fontdict=font_axis)
     plt.ylabel('del_n_eff', fontdict=font_axis)
-
-    # return result.best_values.get('n_eff')
-
-
-        # delta_n_eff=b_value
-        # plt.plot(wl_list[4], linear_tm, 'r')
-    # plt.plot(wl_list[j], result.best_fit,plot_color[j])
-        # plt.plot(wl_list[j], linear_tm, label=f'DC_bias={DC_bias}V')
-
-        # linear_y = []
-        # linear_x = []
-        # linear_tm = []
-
-    # plt.subplot(2, 3, 4)
-    # for j in [4,0,1,2,3,5]:
-    #     maxidx = find_local_maxima_idx(tm_list[j] - fit_eq(wl_list[j]))
-    #     for i in maxidx:
-    #         linear_x.append(wl_list[j][i])
-    #         linear_y.append(tm_list[j][i] - fit_eq(wl_list[j][i]))
-    #     # print(linear_x)
-    #     # print(linear_y)
-    #
-    #     afc = np.polyfit(linear_x, linear_y, 1)
-    #     # poly1d 함수를 사용하여 1차 근사 함수를 만듦
-    #
-    #     af = np.poly1d(afc)
-    #     flat_tm_list = [tm - fit_eq(wl) - af(wl) for wl, tm in zip(wl_list[j], tm_list[j])]
-    #
-    #
-    #     for k in flat_tm_list:
-    #         linear_tm.append(10**(k/10))
-    #
-    #     result = model.fit(linear_tm, params, wave_length=wl_list[j])
-    #     print(result.best_values[3])
-    #
-    #
-    #     # plt.plot(wl_list[4], linear_tm, 'r')
-    #     plt.plot(wl_list[j], result.best_fit,plot_color[j])
-    #     # plt.plot(wl_list[j], linear_tm, label=f'DC_bias={DC_bias}V')
-    #
-    #     linear_y = []
-    #     linear_x = []
-    #     linear_tm = []
-    # plt.title('Flat Transmission spectra - as measured', fontdict=font_title)
-    # plt.xlabel('Wavelength[nm]', fontdict=font_axis)
-    # plt.ylabel('Measured transmission', fontdict=font_axis)
-    # plt.legend(loc='lower center', ncol=2, fontsize=10)
-    # biass=[-2,-1.5,-1.0,-0.5,0.0,0.5]
-    # # def Transmission_fitting_n_eff(wave_length, intensity):
-    #
-    #     # 모델 피팅
-    # linear_x = []
-    # linear_y = []
-    # linear_tm = []
-    # for j in range(6):
-    #
-    #     maxidx = find_local_maxima_idx(tm_list[j] - fit_eq(wl_list[j]))
-    #     for i in maxidx:
-    #         linear_x.append(wl_list[j][i])
-    #         linear_y.append(tm_list[j][i] - fit_eq(wl_list[j][i]))
-    #         # print(linear_x)
-    #         # print(linear_y)
-    #
-    #     afc = np.polyfit(linear_x, linear_y, 1)
-    #         # poly1d 함수를 사용하여 1차 근사 함수를 만듦
-    #
-    #     af = np.poly1d(afc)
-    #     flat_tm_list = [tm - fit_eq(wl) - af(wl) for wl, tm in zip(wl_list[j], tm_list[j])]
-    #
-    #     # print(wave_length.shape,intensity.shape)
-    #     result = model.fit(intensity[4], params, wave_length=wave_length[4])
-    #     print(result.best_values)
-    #     plt.plot(wave_length[4], intensity[4], 'r')
-    #     plt.plot(wave_length[4], result.best_fit, 'b')
-        # 결과 출력
-        # print(result.fit_report())
-
-    # Transmission_fitting_n_eff(wl_list,linear_tm)
- #       plt.plot(wave_len[bias.index(0.0)],1 * np.array(list(map(math.sin,math.pi*40*10**(-9)*2.6/wave_len[bias.index(0.0)])))**2)
 
