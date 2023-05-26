@@ -113,6 +113,7 @@ def tm_plot(x):
 
             plt.plot(wl_a, tm_a, ':', label=f'DC_bias={DC_bias}V')
             DC_bias += 0.5
+            plt.xticks(np.arange(1549, 1551.1, 0.5))
 
         else:
             wl_a, tm_a = [], []
@@ -126,11 +127,11 @@ def tm_plot(x):
 
             plt.plot(wl_a, tm_a, ':', label=f'DC_bias={DC_bias}V')
             DC_bias += 0.5
+            plt.xticks(np.arange(1309, 1311.1, 0.5))
 
     plt.title('Flat Transmission spectra - as measured', fontdict=font_title)
     plt.xlabel('Wavelength[nm]', fontdict=font_axis)
     plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
-    plt.xticks(np.arange(1549, 1551.1, 0.5))
     plt.legend(loc='upper right', ncol=2, fontsize=6)
 
 
