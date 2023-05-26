@@ -56,7 +56,7 @@ def IV_plot(x):
     plt.plot(voltage, fit_plot, 'r--', label='best-fit')
     plt.scatter(voltage, current, c='k',s=20, label='data')
 
-    position_x, position_y=0.05,0.6
+    position_x, position_y=0.05,0.65
 
     for x, y in zip([-2, -1, 1], [current[voltage == -2][0], current[voltage == -1][0], current[voltage == 1.0][0]]):
         if y < 1e-3:
@@ -65,7 +65,7 @@ def IV_plot(x):
             plt.text(position_x, position_y, f"{x}V: {y:.10f}A", transform=plt.gca().transAxes, fontsize=10)
         position_y-=0.1
     # R_squared 출력
-    plt.text(0.05, 0.7, f"R-squared: {R_squared:.15f}",
+    plt.text(0.05, 0.75, f"R-squared: {R_squared:.15f}",
              transform=plt.gca().transAxes,
              bbox=dict(facecolor='none', edgecolor='gray', boxstyle='round,pad=0.5'),
              fontsize=10,fontweight='bold')
