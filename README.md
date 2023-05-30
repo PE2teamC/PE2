@@ -58,7 +58,8 @@ pip install -r requirements.txt
 9. Enter y/n whether to save the data as csv file or not
 10. Exit the program
 
-![image](https://github.com/emg2634/PE2-asset/assets/127360942/00439ee6-7d7b-493d-9d7f-bbbf3149a103)
+![image](https://github.com/emg2634/PE2-asset/assets/127360942/a8856c64-e5c6-4162-9d50-689bacd839d6)
+
 ![image](https://github.com/KyoRyoung/PE2/assets/127359402/da651467-073e-4046-b534-7986311f88b3)
 
 * * *
