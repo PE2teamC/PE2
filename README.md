@@ -27,9 +27,8 @@ This software is programed to analyze measured data of semiconductor wafers.
 - README.md: brief introduction of this software repository
 - run.py: execution python file of this software   
 
-![image](https://github.com/emg2634/PE2-asset/assets/127360942/00439ee6-7d7b-493d-9d7f-bbbf3149a103)
+![image](https://github.com/emg2634/PE2-asset/assets/127360942/a8856c64-e5c6-4162-9d50-689bacd839d6)
 
-* * *
 
 ## Requirements
 - NumPy
