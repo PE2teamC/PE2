@@ -227,6 +227,21 @@ def tm_plot(x):
     plt.ticklabel_format(style="sci", axis="y", scilimits=(0, 0))
 
     plt.subplot(2, 3, 6)
+    if wl_flat_l[0][0] >= 1500:
+        V_piL = 1550 * 10 ** (-7) * 2 / 2 / (delta_n_eff_list[0])
+        plt.text(0.7, 0.9, f"V_piL: {V_piL:.5f}",
+                 transform=plt.gca().transAxes,
+                 bbox=dict(facecolor='none', edgecolor='gray', boxstyle='round,pad=0.5'),
+                 fontsize=10, fontweight='bold')
+
+    else:
+        V_piL = 1310 * 10 ** (-7) * 2 / 2 / (delta_n_eff_list[0])
+        print(V_piL)
+        plt.text(0.7, 0.9, f"V_piL: {V_piL:.5f}",
+                 transform=plt.gca().transAxes,
+                 bbox=dict(facecolor='none', edgecolor='gray', boxstyle='round,pad=0.5'),
+                 fontsize=10, fontweight='bold')
+
     plt.plot(bias,delta_n_eff_list)
     plt.grid(True, axis='both', color='gray', alpha=0.5, linestyle='--')  # 가독성을 위해 grid 삽입
     plt.title('n-V graph', fontdict=font_title)
@@ -244,6 +259,7 @@ def tm_plot(x):
             plt.xlim(wl_flat_l[i][find_closest_value_index(wl_flat_l[i],find_local_minima_idx(tm_flat_l[i]),1550)]-4,
                       wl_flat_l[i][find_closest_value_index(wl_flat_l[i],find_local_minima_idx(tm_flat_l[i]),1550)]+4)
             plt.scatter(wl_flat_l[i],tm_flat_l[i],s=4)
+
             # plt.plot(wl_flat_l[i],best_fit_db_scale[i])
         else:
             plt.xlim(wl_flat_l[i][find_closest_value_index(wl_flat_l[i],find_local_minima_idx(tm_flat_l[i]),1310)]-4,
