@@ -3,7 +3,7 @@
 
 
 ## Overview
-This software is programed to analyze measured data of semiconductor wafers.
+This software is programmed to analyze measured .xml data of semiconductor wafers. You can select the file you want or view the entire data analyzed. Through this program, you can save the processed data as a .png file or save the data as a .csv file.
 
 ## Contents
 1. [Info](#Info)
@@ -22,25 +22,16 @@ This software is programed to analyze measured data of semiconductor wafers.
 ## Project
 - dat: a folder contains XML data
 - doc: a folder contains documentation- Jupyter notebook file describing data analysis results and powerpoint file for presentation
+- ppt: a folder contains powerpoint file for presentation
 - res: a folder contains result figures and csv files
 - src: a folder contains codes of the software
 - README.md: brief introduction of this software repository
 - run.py: execution python file of this software   
-
-![image](https://github.com/emg2634/PE2-asset/assets/127360942/b184c84e-0c90-4cd1-9f9b-59a0a868d48c)
-
+* * *
 
 ## Requirements
-- NumPy
-- xml.etree.ElementTree
-- matplotlib
-- scikit-learn
-- pandas
-- lmfit
-- tqdm
-- glob
 
-To install all requirements, use the following command.   
+All requirements are noted in `requirements.txt`. To install all requirements, use the following command.   
 ```
 pip install -r requirements.txt
 ```
@@ -55,14 +46,17 @@ pip install -r requirements.txt
 6. Exit the program
 
 ![image](https://github.com/emg2634/PE2-asset/assets/127360942/b184c84e-0c90-4cd1-9f9b-59a0a868d48c)
-
 ![image](https://github.com/KyoRyoung/PE2/assets/127359402/da651467-073e-4046-b534-7986311f88b3)
 
 * * *
 
 ## Collaborators
-- 2019030455 고주환   
-- 2019052415 윤석현   
-- 2019080973 이동현   
-- 2020027192 김교령
+
+|member|contact|
+|------|---|
+|고주환|rhwnghks00@hanyang.ac.kr|
+|윤석현|dbsminan@hanyang.ac.kr|
+|이동현|emg2634@gmail.com|
+|김교령|jamie97@hanyang.ac.kr|
+
 * * *
