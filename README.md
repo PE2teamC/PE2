@@ -48,15 +48,11 @@ pip install -r requirements.txt
 
 ## Instructions
 1. Run run.py
-2. Select the desired device type (ex. `LMZC`, `LMZO`, `LMZ`)
-3. Enter the desired wafer number in the form "D##" (ex. `D07`, `D08`, `D23`, `D24`, `all`)
-4. Enter the date of measurement (`20YYMMDD`, `all`)
-5. Enter Wafer's row and column in the form of "#,#" (ex. `0,0`)
-6. Enter your name
-7. Enter y/n whether to see the data as png file or not
-8. Enter y/n whether to save the data as png file or not
-9. Enter y/n whether to save the data as csv file or not
-10. Exit the program
+2. Select the desired device type (ex. `LMZC`, `LMZO`, `a`)
+3. Enter your name
+4. Enter y/n whether to save the data as png file or not
+5. Enter y/n whether to save the data as csv file or not
+6. Exit the program
 
 ![image](https://github.com/emg2634/PE2-asset/assets/127360942/a8856c64-e5c6-4162-9d50-689bacd839d6)
 
