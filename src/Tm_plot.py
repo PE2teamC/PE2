@@ -80,12 +80,7 @@ def tm_plot(x):
         fit = np.polyfit(np.array(wl_ref), np.array(tm_ref), p)
         fit_eq = np.poly1d(fit)
         rsq_ref.append(r2_score(tm_ref, fit_eq(wl_ref)))
-        # plt.plot(wl_ref, fit_eq(wl_ref), label=f'{p}th R² : {r2_score(tm_ref, fit_eq(wl_ref))}')
 
-    # plt.title('Transmission spectra - as measured', fontdict=font_title)
-    # plt.xlabel('Wavelength[nm]', fontdict=font_axis)
-    # plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
-    # plt.legend(loc='lower center', fontsize=8)
 
     # flat-flat Wavelength-Transmission-------------------------------------------------
     plt.subplot(2, 3, 2)
@@ -180,7 +175,6 @@ def tm_plot(x):
 
         fmodel = Model(fitting_delta_n_eff, independent_vars=["wave_length"], param_names=['delta_n_eff'])
 
-        # params = fmodel.make_params(delta_n_eff=0)
         fmodel.set_param_hint('delta_n_eff', value=0.0001, min=-1, max=1)
 
         maxidx = find_local_maxima_idx(tm_list[j] - fit_eq(wl_list[j]))
@@ -195,21 +189,19 @@ def tm_plot(x):
         best_fit_db_scale = []
         for k in flat_tm_list:
             linear_tm.append(10 ** (k / 10)/1000)
-        # plt.plot(wl_list[j],linear_tm,label=f'DCBias = {DC_bias}V')
-        # result = model.fit(linear_tm, wave_length=wl_list[v0ind])
-        # fresult = fmodel.fit(linear_tm, params, wave_length=wl_list[j])
+
         fresult = fmodel.fit(linear_tm, wave_length=wl_list[j])
-        # print(linear_to_db((fresult.best_fit).tolist()))
+
         fit_db_scale=linear_to_db((fresult.best_fit).tolist())
         plt.subplot(2, 3, 3)
         best_fit_db_scale.append(fit_db_scale)
 
         plt.plot(wl_flat_l[j],best_fit_db_scale[0],label=f'DCBias = {i}V fit')
-        # print(r2_score(tm_flat_l[j],best_fit_db_scale[0]))
+
         plt.subplot(2, 3, 5)
 
         plt.plot(wl_list[j], fresult.best_fit,label=f'DCBias = {i}V fit')
-        # print(fresult.best_values['delta_n_eff'])
+
         delta_n_eff_value = fresult.best_values['delta_n_eff']
 
         delta_n_eff_list.append(np.array(delta_n_eff_value))
@@ -234,13 +226,14 @@ def tm_plot(x):
                  bbox=dict(facecolor='none', edgecolor='gray', boxstyle='round,pad=0.5'),
                  fontsize=10, fontweight='bold')
 
+
     else:
         V_piL = 1310 * 10 ** (-7) * 2 / 2 / (delta_n_eff_list[0])
-        print(V_piL)
         plt.text(0.7, 0.9, f"V_piL: {V_piL:.5f}",
                  transform=plt.gca().transAxes,
                  bbox=dict(facecolor='none', edgecolor='gray', boxstyle='round,pad=0.5'),
                  fontsize=10, fontweight='bold')
+
 
     plt.plot(bias,delta_n_eff_list)
     plt.grid(True, axis='both', color='gray', alpha=0.5, linestyle='--')  # 가독성을 위해 grid 삽입
@@ -253,19 +246,17 @@ def tm_plot(x):
     DC_bias = -2.0
     for i in range(6):
         if wl_flat_l[i][0] >= 1500:
-            # print(find_local_maxima_idx(tm_flat_l[i]))
-            # print(wl_flat_l[i][find_closest_value_index(tm_flat_l[i],find_local_minima_idx(tm_flat_l[i]),1550)])
+
 
             plt.xlim(wl_flat_l[i][find_closest_value_index(wl_flat_l[i],find_local_minima_idx(tm_flat_l[i]),1550)]-4,
                       wl_flat_l[i][find_closest_value_index(wl_flat_l[i],find_local_minima_idx(tm_flat_l[i]),1550)]+4)
             plt.scatter(wl_flat_l[i],tm_flat_l[i],s=4)
 
-            # plt.plot(wl_flat_l[i],best_fit_db_scale[i])
         else:
             plt.xlim(wl_flat_l[i][find_closest_value_index(wl_flat_l[i],find_local_minima_idx(tm_flat_l[i]),1310)]-4,
                      wl_flat_l[i][find_closest_value_index(wl_flat_l[i],find_local_minima_idx(tm_flat_l[i]),1310)]+4)
             plt.scatter(wl_flat_l[i],tm_flat_l[i],s=4)
-            # plt.plot(wl_flat_l[i],best_fit_db_scale[i])
+
     plt.title('Enlarged Transmission spectra', fontdict=font_title)
     plt.xlabel('Wavelength[nm]', fontdict=font_axis)
     plt.ylabel('Measured transmission[dB]', fontdict=font_axis)
@@ -275,3 +266,5 @@ def tm_plot(x):
                          prop=font_legend)
     plt.gca().add_artist(legend1)
     plt.legend(loc='lower center', ncol=2, fontsize=8)
+
+    return V_piL
