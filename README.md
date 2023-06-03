@@ -46,7 +46,7 @@ pip install -r requirements.txt
 6. Exit the program
 
 ![image](https://github.com/emg2634/PE2-asset/assets/127360942/b184c84e-0c90-4cd1-9f9b-59a0a868d48c)
-![image](https://github.com/KyoRyoung/PE2/assets/127359402/da651467-073e-4046-b534-7986311f88b3)
+![image](https://github.com/emg2634/PE2-asset/assets/127360942/317b38d1-fe34-4b03-bb7a-1a8f9577a393)
 
 * * *
 
