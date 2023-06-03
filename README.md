@@ -1,6 +1,4 @@
-# PE2_C
-**Programming for Engineer Ⅱ**   
-
+![header](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=300&section=header&text=Programming%20for%20Engineers%20Ⅱ&fontSize=45&&fontColor=000000&animation=fadeIn&fontAlignY=30&desc=TEAM%20C%20Project&descAlignY=51&descAlign=50)
 
 ## Overview
 This software is programmed to analyze measured .xml data of semiconductor wafers. You can select the file you want or view the entire data analyzed. Through this program, you can save the processed data as a .png file or save the data as a .csv file.
