@@ -38,11 +38,11 @@ pip install -r requirements.txt
 
 ## Instructions
 1. Run run.py
-2. Select the desired device type (ex. `LMZC`, `LMZO`, `a`)
-3. Enter your name
 
 ![image.png](https://github.com/emg2634/PE2-asset/assets/127360942/41b38e6d-a366-446a-b13b-405a8f6f6f28)
 
+2. Select the desired device type (ex. `LMZC`, `LMZO`, `a`)
+3. Enter your name
 4. Enter y/n whether to save the data as png file or not
 5. Enter y/n whether to save the data as csv file or not
 6. Exit the program
