@@ -15,6 +15,7 @@ This software is programmed to analyze measured .xml data of semiconductor wafer
 ## Info
 - `python 3.9`
 - `Windows 11`
+- 'Jupyter Notebook 3.10.9'
 * * *
 
 ## Project
